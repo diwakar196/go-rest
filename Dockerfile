@@ -8,4 +8,10 @@ RUN go mod download
 
 COPY . .
 
-CMD ["go", "run", "cmd/server/main.go"]
+RUN go mod tidy
+
+RUN go build -o server cmd/server/main.go
+
+EXPOSE 8080
+
+CMD ["./server"]
