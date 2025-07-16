@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/diwakar196/go-rest/pkg/config"
+	"go-rest/pkg/config"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
