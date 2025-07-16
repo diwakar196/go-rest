@@ -25,6 +25,7 @@ services:
       DB_PASSWORD: go
       DB_NAME: goapp
       DB_HOST: db
+      DB_PORT: 3306
     volumes:
       - .:/app
     working_dir: /app
