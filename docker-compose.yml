@@ -12,23 +12,26 @@ services:
       - "3307:3306"
     volumes:
       - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   app:
     build: .
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       PORT: 8080
       DB_USER: go
       DB_PASSWORD: go
       DB_NAME: goapp
       DB_HOST: db
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: go run cmd/server/main.go
+      DB_PORT: 3306
 
 volumes:
   dbdata:
