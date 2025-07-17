@@ -3,7 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 
-	"go-rest/model"
+	"go-rest/internal/model"
 )
 
 type Repository struct {

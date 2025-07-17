@@ -1,17 +1,17 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 
-	"go-rest/handler"
+	"go-rest/internal/handler"
 )
 
-func SetupRouter(db *gorm.DB) *gin.Engine {
-	router := gin.Default()
+func SetupRouter(db *gorm.DB) *fiber.App {
+	app := fiber.New()
 
-	userGroup := router.Group("/users")
+	userGroup := app.Group("/users")
 	handler.RegisterRoutes(userGroup, db)
 
-	return router
+	return app
 }

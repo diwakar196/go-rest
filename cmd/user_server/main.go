@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"go-rest/api"
-	"go-rest/model"
+	"go-rest/internal/api"
+	"go-rest/internal/model"
 	"go-rest/pkg/config"
 	"go-rest/pkg/database"
 )
@@ -14,7 +14,7 @@ func main() {
 	db := database.Connect(cfg)
 	db.AutoMigrate(&model.User{})
 
-	r := api.SetupRouter(db)
+	app := api.SetupRouter(db)
 	log.Printf("Server is running on port : %s", cfg.Port)
-	r.Run(":" + cfg.Port)
+	log.Fatal(app.Listen(":" + cfg.Port))
 }

@@ -1,8 +1,8 @@
 package service
 
 import (
-	"go-rest/model"
-	"go-rest/repository"
+	"go-rest/internal/model"
+	"go-rest/internal/repository"
 )
 
 type Service struct {

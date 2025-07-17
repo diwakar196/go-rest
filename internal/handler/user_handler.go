@@ -1,44 +1,37 @@
 package handler
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 
-	"go-rest/model"
-	"go-rest/repository"
-	"go-rest/service"
+	"go-rest/internal/model"
+	"go-rest/internal/repository"
+	"go-rest/internal/service"
 )
 
-func RegisterRoutes(r *gin.RouterGroup, db *gorm.DB) {
+func RegisterRoutes(r fiber.Router, db *gorm.DB) {
 	repo := repository.NewRepository(db)
 	service := service.NewService(repo)
 
-	r.POST("/", func(c *gin.Context) { CreateUser(c, service) })
-
-	r.GET("/", func(c *gin.Context) { GetAllUsers(c, service) })
-
+	r.Post("/", func(c *fiber.Ctx) error { return CreateUser(c, service) })
+	r.Get("/", func(c *fiber.Ctx) error { return GetAllUsers(c, service) })
 }
 
-func GetAllUsers(c *gin.Context, service *service.Service) {
+func GetAllUsers(c *fiber.Ctx, service *service.Service) error {
 	users, err := service.GetAllUsers()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	c.JSON(http.StatusOK, users)
+	return c.JSON(users)
 }
 
-func CreateUser(c *gin.Context, service *service.Service) {
+func CreateUser(c *fiber.Ctx, service *service.Service) error {
 	var user model.User
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+	if err := c.BodyParser(&user); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 	if err := service.CreateUser(&user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	c.JSON(http.StatusCreated, user)
+	return c.Status(fiber.StatusCreated).JSON(user)
 }
