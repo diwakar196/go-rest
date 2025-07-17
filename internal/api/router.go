@@ -13,5 +13,5 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	userGroup := router.Group("/users")
 	handler.RegisterRoutes(userGroup, db)
 
-	return route
+	return router
 }
