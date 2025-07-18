@@ -7,11 +7,22 @@ import (
 	"go-rest/internal/handler"
 )
 
-func SetupRouter(db *gorm.DB) *fiber.App {
-	app := fiber.New()
+func FinanceManagementApp(db *gorm.DB) *fiber.App {
+	financeMgmtApp := fiber.New()
+	apiRoutes := financeMgmtApp.Group("/api")
+	registerPing(apiRoutes)
+	registerUserRoutes(apiRoutes)
+	return financeMgmtApp
+}
 
-	userGroup := app.Group("/users")
-	handler.RegisterRoutes(userGroup, db)
+func registerPing(apiRoutes fiber.Router) {
+	apiRoutes.Get("/ping", func(c *fiber.Ctx) error {
+		return c.SendString("Server is healthy!")
+	})
+}
 
-	return app
+func registerUserRoutes(apiRoutes fiber.Router) {
+	userRoutes := apiRoutes.Group("/users")
+	userRoutes.Get("/", handler.GetAllUsers)
+	userRoutes.Post("/", handler.CreateUser)
 }

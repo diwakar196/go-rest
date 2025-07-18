@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"sync"
 )
 
 type Config struct {
@@ -13,9 +14,13 @@ type Config struct {
 	DBName string
 }
 
-func LoadConfig() *Config {
+var (
+	config *Config
+	once   sync.Once
+)
 
-	return &Config{
+func loadConfig() {
+	config = &Config{
 		Port:   os.Getenv("PORT"),
 		DBHost: os.Getenv("DB_HOST"),
 		DBPort: os.Getenv("DB_PORT"),
@@ -23,4 +28,11 @@ func LoadConfig() *Config {
 		DBUser: os.Getenv("DB_USER"),
 		DBName: os.Getenv("DB_NAME"),
 	}
+}
+
+func GetConfig() *Config {
+	if config == nil {
+		once.Do(loadConfig)
+	}
+	return config
 }

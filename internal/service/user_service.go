@@ -5,18 +5,10 @@ import (
 	"go-rest/internal/repository"
 )
 
-type Service struct {
-	repo *repository.Repository
+func CreateUser(user *model.User) error {
+	return repository.CreateUser(user)
 }
 
-func NewService(repo *repository.Repository) *Service {
-	return &Service{repo: repo}
-}
-
-func (s *Service) CreateUser(user *model.User) error {
-	return s.repo.Create(user)
-}
-
-func (s *Service) GetAllUsers() ([]model.User, error) {
-	return s.repo.GetAll()
+func GetAllUsers() ([]model.User, error) {
+	return repository.GetAllUsers()
 }

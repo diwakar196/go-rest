@@ -1,25 +1,18 @@
 package repository
 
 import (
-	"gorm.io/gorm"
-
 	"go-rest/internal/model"
+	"go-rest/pkg/database"
 )
 
-type Repository struct {
-	db *gorm.DB
+func CreateUser(user *model.User) error {
+	db := database.GetDB()
+	return db.Create(user).Error
 }
 
-func NewRepository(db *gorm.DB) *Repository {
-	return &Repository{db: db}
-}
-
-func (r *Repository) Create(user *model.User) error {
-	return r.db.Create(user).Error
-}
-
-func (r *Repository) GetAll() ([]model.User, error) {
+func GetAllUsers() ([]model.User, error) {
+	db := database.GetDB()
 	var users []model.User
-	result := r.db.Find(&users)
+	result := db.Find(&users)
 	return users, result.Error
 }

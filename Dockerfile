@@ -8,7 +8,7 @@
     
     COPY . .
     
-    RUN CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/user_server/main.go
+    RUN CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/server/main.go
     
     # Debug: confirm binary is created
     RUN ls -la /app
