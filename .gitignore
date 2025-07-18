@@ -6,6 +6,8 @@
 *.dylib
 
 .env
+start.sh
+stop.sh
 
 # Test binary, build outputs
 *.test

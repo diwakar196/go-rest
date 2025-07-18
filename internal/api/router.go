@@ -1,17 +1,28 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 
-	"go-rest/handler"
+	"go-rest/internal/handler"
 )
 
-func SetupRouter(db *gorm.DB) *gin.Engine {
-	router := gin.Default()
+func FinanceManagementApp(db *gorm.DB) *fiber.App {
+	financeMgmtApp := fiber.New()
+	apiRoutes := financeMgmtApp.Group("/api")
+	registerPing(apiRoutes)
+	registerUserRoutes(apiRoutes)
+	return financeMgmtApp
+}
 
-	userGroup := router.Group("/users")
-	handler.RegisterRoutes(userGroup, db)
+func registerPing(apiRoutes fiber.Router) {
+	apiRoutes.Get("/ping", func(c *fiber.Ctx) error {
+		return c.SendString("Server is healthy!")
+	})
+}
 
-	return router
+func registerUserRoutes(apiRoutes fiber.Router) {
+	userRoutes := apiRoutes.Group("/users")
+	userRoutes.Get("/", handler.GetAllUsers)
+	userRoutes.Post("/", handler.CreateUser)
 }
