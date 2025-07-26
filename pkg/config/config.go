@@ -6,12 +6,13 @@ import (
 )
 
 type Config struct {
-	Port   string
-	DBHost string
-	DBPort string
-	DBPass string
-	DBUser string
-	DBName string
+	Port          string
+	DBHost        string
+	DBPort        string
+	DBPass        string
+	DBUser        string
+	DBName        string
+	EncryptionKey string
 }
 
 var (
@@ -21,13 +22,21 @@ var (
 
 func loadConfig() {
 	config = &Config{
-		Port:   os.Getenv("PORT"),
-		DBHost: os.Getenv("DB_HOST"),
-		DBPort: os.Getenv("DB_PORT"),
-		DBPass: os.Getenv("DB_PASSWORD"),
-		DBUser: os.Getenv("DB_USER"),
-		DBName: os.Getenv("DB_NAME"),
+		Port:          os.Getenv("PORT"),
+		DBHost:        os.Getenv("DB_HOST"),
+		DBPort:        os.Getenv("DB_PORT"),
+		DBPass:        os.Getenv("DB_PASSWORD"),
+		DBUser:        os.Getenv("DB_USER"),
+		DBName:        os.Getenv("DB_NAME"),
+		EncryptionKey: os.Getenv("ENCRYPTION_KEY"),
 	}
+}
+
+func GetConfig() *Config {
+	if config == nil {
+		once.Do(loadConfig)
+	}
+	return config
 }
 
 func GetConfig() *Config {
