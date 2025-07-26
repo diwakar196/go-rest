@@ -38,3 +38,10 @@ func GetConfig() *Config {
 	}
 	return config
 }
+
+func GetConfig() *Config {
+	if config == nil {
+		once.Do(loadConfig)
+	}
+	return config
+}

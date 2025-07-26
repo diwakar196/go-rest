@@ -5,9 +5,6 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-
-	"go-rest/internal/model"
-	"go-rest/internal/service"
 )
 
 func GetAllUsers(c *fiber.Ctx) error {
@@ -21,7 +18,6 @@ func GetAllUsers(c *fiber.Ctx) error {
 
 func GetUser(c *fiber.Ctx) error {
 	log.Println("Getting user", c.Params("userId"))
-
 	// Convert userId string to uint
 	userIdStr := c.Params("userId")
 	userId, err := strconv.ParseUint(userIdStr, 10, 32)
@@ -42,6 +38,7 @@ func GetUser(c *fiber.Ctx) error {
 
 func CreateUser(c *fiber.Ctx) error {
 	log.Println("Creating user")
+
 	var user model.User
 	if err := c.BodyParser(&user); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
