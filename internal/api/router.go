@@ -25,4 +25,7 @@ func registerUserRoutes(apiRoutes fiber.Router) {
 	userRoutes := apiRoutes.Group("/users")
 	userRoutes.Get("/", handler.GetAllUsers)
 	userRoutes.Post("/", handler.CreateUser)
+	userRoutes.Get("/{userId}", handler.GetUser)
+	userRoutes.Put("/{userId}", handler.UpdateUser)
+	userRoutes.Delete("/{userId}", handler.DeleteUser)
 }
